@@ -15,7 +15,7 @@ import {
 } from "./release-github";
 
 const projectRoot = resolve(import.meta.dir, "..");
-const defaultRepository = "ChuniPingu/PenguinTools.UI";
+const defaultRepository = "GiftiaAIRA/PenguinTools.UI";
 
 type Args = {
   tag?: string;
@@ -36,7 +36,7 @@ function usage(): never {
 
 Options:
   --tag=vX.Y.Z          UI tag (default: v{tauri.conf.json version})
-  --title=...           Release title (default: PenguinTools.UI v{UI version})
+  --title=...           Release title (default: PenguinTools.UI Extend v{UI version})
   --notes=...           Release notes text (overrides changelog)
   --notes-file=path     Release notes from file (overrides changelog)
   --repository=owner/repo  UI repo (default: ${defaultRepository})
@@ -45,7 +45,7 @@ Options:
   --skip-build          Reuse existing NSIS artifacts
   --allow-dirty         Allow a dirty working tree
   --clobber             Overwrite existing GitHub release assets
-  --skip-s3             Skip S3-compatible upload
+  --skip-s3             Skip S3-compatible upload (always on in the Extend fork)
 
 By default, release notes are read from docs/changelog/X.Y.Z.md (matching tauri.conf.json version).
 `);
@@ -60,7 +60,8 @@ function parseArgs(argv: string[]): Args {
     skipBuild: false,
     allowDirty: false,
     clobber: false,
-    skipS3: false,
+    // The Extend fork publishes updates through GitHub Releases only; it has no S3 mirror.
+    skipS3: true,
   };
 
   for (const arg of argv) parseArgument(args, arg);

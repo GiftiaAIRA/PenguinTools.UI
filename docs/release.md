@@ -1,8 +1,10 @@
 # Releases
 
-Publish the Windows installer, signature, and updater manifest to [PenguinTools.UI](https://github.com/ChuniPingu/PenguinTools.UI/releases). The tag is `v<UI version>` from `tauri.conf.json`; the default title is `PenguinTools.UI v<UI version>`.
+Publish the Windows installer, signature, and updater manifest to [PenguinTools.UI Extend](https://github.com/GiftiaAIRA/PenguinTools.UI/releases). The tag is `v<UI version>` from `tauri.conf.json`; the default title is `PenguinTools.UI Extend v<UI version>`.
 
-The UI bundles the pinned PenguinTools source. UI and CLI releases have independent versions and schedules. The CLI repository links to the latest UI release.
+The Extend fork publishes to GitHub only. Installed clients read `latest.json` from the latest GitHub release, so publish stable releases as non-prerelease releases and keep `latest.json` attached. The S3 mirror steps below do not apply; the release script always skips them.
+
+The UI bundles the pinned [PenguinTools Extend](https://github.com/GiftiaAIRA/PenguinTools) source. UI and CLI releases have independent versions and schedules. The CLI repository links to the latest UI release.
 
 [wallbind](https://github.com/ChuniPingu/wallbind) is released separately. The UI exports wall images and bindings through the bundled CLI; users install the DLL in their game using the plugin's installation guide. UI installers and automatic updates do not install the plugin.
 
@@ -31,12 +33,10 @@ The UI bundles the pinned PenguinTools source. UI and CLI releases have independ
 
 Install `git` and `gh`, authenticate GitHub CLI with access to the UI repository, and configure:
 
-| Setting                 | Source                                                                 |
-| ----------------------- | ---------------------------------------------------------------------- |
-| Updater private key     | `.updater.key` or `TAURI_SIGNING_PRIVATE_KEY`                          |
-| Key password, if used   | `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`                                   |
-| Object storage          | `S3_ENDPOINT`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_BUCKET` |
-| Optional storage region | `S3_REGION`                                                            |
+| Setting               | Source                                        |
+| --------------------- | --------------------------------------------- |
+| Updater private key   | `.updater.key` or `TAURI_SIGNING_PRIVATE_KEY` |
+| Key password, if used | `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`          |
 
 For initial setup:
 
@@ -58,11 +58,11 @@ The script builds the installer and stages the installer, signature, and `latest
 
 The GitHub manifest downloads from the UI repository using the UI tag. The S3 manifest downloads from the existing mirror using the same UI version. Drafts and prereleases are published only to GitHub; they do not advance the stable S3 updater.
 
-Verify the UI release downloads and the S3 updater manifest. The manifest version must match the UI version, and its installer URL must be available.
+Verify the UI release downloads and the `latest.json` attached to the GitHub release. The manifest version must match the UI version, and its installer URL must be available.
 
 | Flag                                 | Behavior                                                                                              |
 | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `--repository=owner/repo`            | Select the UI repository; defaults to `ChuniPingu/PenguinTools.UI`                                    |
+| `--repository=owner/repo`            | Select the UI repository; defaults to `GiftiaAIRA/PenguinTools.UI`                                    |
 | `--tag=vX.Y.Z`                       | Set the tag; must match the configured UI version                                                     |
 | `--title=...`                        | Override the release title                                                                            |
 | `--skip-build`                       | Reuse existing NSIS artifacts for this UI version                                                     |

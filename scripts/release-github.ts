@@ -18,7 +18,7 @@ export function resolveReleaseIdentity(
 
   return {
     tag: uiTag,
-    title: "PenguinTools.UI v" + uiVersion,
+    title: "PenguinTools.UI Extend v" + uiVersion,
   };
 }
 

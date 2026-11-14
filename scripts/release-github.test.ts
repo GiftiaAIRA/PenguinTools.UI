@@ -5,7 +5,7 @@ const repository = "ChuniPingu/PenguinTools.UI";
 const release = {
   repository,
   tag: "v2.5.4",
-  title: "PenguinTools.UI v2.5.4",
+  title: "PenguinTools.UI Extend v2.5.4",
   notes: "UI release notes",
   assetPaths: ["installer.exe", "installer.exe.sig", "latest.json"],
   exists: false,
@@ -18,7 +18,7 @@ describe("release versions", () => {
   it("uses the UI version independently of the bundled CLI", () => {
     expect(resolveReleaseIdentity("2.5.4", "v2.5.4")).toEqual({
       tag: "v2.5.4",
-      title: "PenguinTools.UI v2.5.4",
+      title: "PenguinTools.UI Extend v2.5.4",
     });
   });
 
