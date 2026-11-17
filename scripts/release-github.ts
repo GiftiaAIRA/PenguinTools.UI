@@ -22,6 +22,14 @@ export function resolveReleaseIdentity(
   };
 }
 
+/**
+ * GitHub renames release assets whose names contain spaces (the space becomes a period),
+ * so the updater manifest must point at a name GitHub keeps as is.
+ */
+export function releaseAssetName(fileName: string): string {
+  return fileName.trim().replace(/\s+/g, "-");
+}
+
 export function trimTrailingSlashes(value: string): string {
   let end = value.length;
   while (end > 0 && value[end - 1] === "/") {

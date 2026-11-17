@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from "vite-plus/test";
-import { createUpdaterManifest, publishRelease, resolveReleaseIdentity } from "./release-github";
+import {
+  createUpdaterManifest,
+  publishRelease,
+  releaseAssetName,
+  resolveReleaseIdentity,
+} from "./release-github";
 
 const repository = "ChuniPingu/PenguinTools.UI";
 const release = {
@@ -58,6 +63,17 @@ describe("updater download locations", () => {
         downloadTag: "v2.5.4",
       }).platforms["windows-x86_64"].url,
     ).toBe("https://releases.example.com/penguin-tools/v2.5.4/UI%20setup.exe");
+  });
+});
+
+describe("release asset names", () => {
+  it("replaces spaces that GitHub would rewrite in asset names", () => {
+    expect(releaseAssetName("PenguinTools Extend_3.0.1_x64-setup.exe")).toBe(
+      "PenguinTools-Extend_3.0.1_x64-setup.exe",
+    );
+    expect(releaseAssetName("PenguinTools_2.5.4_x64-setup.exe")).toBe(
+      "PenguinTools_2.5.4_x64-setup.exe",
+    );
   });
 });
 

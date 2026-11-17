@@ -10,6 +10,7 @@ import { requireUpdaterSigningKey } from "./updater-env";
 import {
   createUpdaterManifest,
   publishRelease,
+  releaseAssetName,
   resolveReleaseIdentity,
   trimTrailingSlashes,
 } from "./release-github";
@@ -395,13 +396,14 @@ async function main(): Promise<void> {
   await rm(artifactRoot, { recursive: true, force: true });
   await mkdir(artifactRoot, { recursive: true });
 
-  const installerDest = join(artifactRoot, installerName);
-  const signatureDest = join(artifactRoot, `${installerName}.sig`);
+  const assetName = releaseAssetName(installerName);
+  const installerDest = join(artifactRoot, assetName);
+  const signatureDest = join(artifactRoot, `${assetName}.sig`);
   const latestJsonDest = join(artifactRoot, "latest.json");
 
-  console.log(`Copying ${installerName}...`);
+  console.log(`Copying ${installerName} as ${assetName}...`);
   await copyFile(installerSource, installerDest);
-  console.log(`Copying ${installerName}.sig...`);
+  console.log(`Copying ${assetName}.sig...`);
   await copyFile(signatureSource, signatureDest);
 
   const publicBase = "https://github.com/" + args.repository + "/releases/download";
@@ -410,7 +412,7 @@ async function main(): Promise<void> {
   await writeLatestJson({
     version,
     notes: resolvedNotes.text,
-    installerName,
+    installerName: assetName,
     signature,
     publicBase,
     tag,
@@ -442,7 +444,7 @@ async function main(): Promise<void> {
       await writeLatestJson({
         version,
         notes: resolvedNotes.text,
-        installerName,
+        installerName: assetName,
         signature,
         publicBase: mirrorBase,
         tag,
