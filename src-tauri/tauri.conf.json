@@ -39,6 +39,7 @@
     ],
     "createUpdaterArtifacts": true,
     "resources": {
+      "../LICENSE": "LICENSE",
       "resources/runtime/": "runtime/"
     },
     "icon": [

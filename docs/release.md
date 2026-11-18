@@ -2,7 +2,7 @@
 
 Publish the Windows installer, signature, and updater manifest to [PenguinTools.UI Extend](https://github.com/GiftiaAIRA/PenguinTools.UI/releases). The tag is `v<UI version>` from `tauri.conf.json`; the default title is `PenguinTools.UI Extend v<UI version>`.
 
-The Extend fork publishes to GitHub only. Installed clients read `latest.json` from the latest GitHub release, so publish stable releases as non-prerelease releases and keep `latest.json` attached. The S3 mirror steps below do not apply; the release script always skips them.
+The Extend fork publishes to GitHub only. Installed clients read `latest.json` from the latest stable GitHub release.
 
 The UI bundles the pinned [PenguinTools Extend](https://github.com/GiftiaAIRA/PenguinTools) source. UI and CLI releases have independent versions and schedules. The CLI repository links to the latest UI release.
 
@@ -29,7 +29,7 @@ The UI bundles the pinned [PenguinTools Extend](https://github.com/GiftiaAIRA/Pe
    git push origin vX.Y.Z
    ```
 
-## Signing and storage
+## Signing
 
 Install `git` and `gh`, authenticate GitHub CLI with access to the UI repository, and configure:
 
@@ -44,7 +44,7 @@ For initial setup:
 vp exec tauri signer generate -w .\.updater.key --ci
 ```
 
-Copy the public key from `.updater.key.pub` to `plugins.updater.pubkey` in [tauri.conf.json](../src-tauri/tauri.conf.json). Keep private keys and storage credentials local.
+Copy the public key from `.updater.key.pub` to `plugins.updater.pubkey` in [tauri.conf.json](../src-tauri/tauri.conf.json). Keep the private key and its password local.
 
 Installed clients trust the configured public key and check the configured updater endpoint. A key or endpoint change needs an update path for those clients.
 
@@ -54,23 +54,20 @@ Installed clients trust the configured public key and check the configured updat
 vp run release
 ```
 
-The script builds the installer and stages the installer, signature, and `latest.json` in a GitHub draft. It uploads stable releases to the S3 mirror, writing the mirror's `latest.json` after its download files, then publishes the GitHub release. A failed attempt can be retried with `--clobber`.
+The script builds the installer, stages the installer, signature, and `latest.json` in a GitHub draft, then applies the selected release status. The manifest points to the installer attached to the UI tag. Drafts and prereleases do not advance the stable updater.
 
-The GitHub manifest downloads from the UI repository using the UI tag. The S3 manifest downloads from the existing mirror using the same UI version. Drafts and prereleases are published only to GitHub; they do not advance the stable S3 updater.
+Before making the draft public, inspect the installer for the desktop `LICENSE` and the separate CLI license and notices described in [runtime files](architecture.md#runtime-files). After publishing, verify the downloads and updater manifest from an unauthenticated browser. The manifest version must match the UI version, and its installer URL must resolve to the signed installer.
 
-Verify the UI release downloads and the `latest.json` attached to the GitHub release. The manifest version must match the UI version, and its installer URL must be available.
-
-| Flag                                 | Behavior                                                                                              |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `--repository=owner/repo`            | Select the UI repository; defaults to `GiftiaAIRA/PenguinTools.UI`                                    |
-| `--tag=vX.Y.Z`                       | Set the tag; must match the configured UI version                                                     |
-| `--title=...`                        | Override the release title                                                                            |
-| `--skip-build`                       | Reuse existing NSIS artifacts for this UI version                                                     |
-| `--skip-s3`                          | Publish to GitHub only; installed clients using S3 receive updates when that mirror is next published |
-| `--clobber`                          | Replace existing GitHub release assets                                                                |
-| `--draft`                            | Prepare or update a draft                                                                             |
-| `--prerelease`                       | Publish or update a prerelease                                                                        |
-| `--notes-file=path` or `--notes=...` | Override the UI changelog file                                                                        |
+| Flag                                 | Behavior                                                           |
+| ------------------------------------ | ------------------------------------------------------------------ |
+| `--repository=owner/repo`            | Select the UI repository; defaults to `GiftiaAIRA/PenguinTools.UI` |
+| `--tag=vX.Y.Z`                       | Set the tag; must match the configured UI version                  |
+| `--title=...`                        | Override the release title                                         |
+| `--skip-build`                       | Reuse existing NSIS artifacts for this UI version                  |
+| `--clobber`                          | Replace existing GitHub release assets                             |
+| `--draft`                            | Prepare or update a draft                                          |
+| `--prerelease`                       | Publish or update a prerelease                                     |
+| `--notes-file=path` or `--notes=...` | Override the UI changelog file                                     |
 
 Pass flags after the script name, for example `vp run release --skip-build --clobber`. Rerun a prepared draft without `--draft` to publish it.
 
@@ -82,15 +79,6 @@ Pass flags after the script name, for example `vp run release --skip-build --clo
 src-tauri/target/release/bundle/nsis/*-setup.exe
 src-tauri/target/release/bundle/nsis/*-setup.exe.sig
 artifacts/release/v<UI version>/latest.json
-artifacts/release/v<UI version>/s3/latest.json
-```
-
-The S3 key prefix comes from the first updater endpoint, removing `/latest.json`:
-
-```text
-<prefix>/latest.json
-<prefix>/v<UI version>/PenguinTools_<UI version>_x64-setup.exe
-<prefix>/v<UI version>/PenguinTools_<UI version>_x64-setup.exe.sig
 ```
 
 See [application architecture](architecture.md#runtime-files) for the installed runtime layout.

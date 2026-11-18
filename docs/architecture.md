@@ -41,8 +41,11 @@ Tauri packages the staged directory as `runtime/`:
 ```text
 <install>/
   penguin-tools.exe
+  LICENSE
   runtime/
     PenguinTools.CLI.exe
+    LICENSE
+    THIRD-PARTY-NOTICES.md
     assets/
       texconv/texconv.exe
       ffmpeg/ffmpeg.exe
@@ -53,7 +56,7 @@ Tauri packages the staged directory as `runtime/`:
     <managed dependencies and runtime configuration for the fdd profile>
 ```
 
-The CLI runs from the runtime directory. Writable `user-data/` and `temp/` directories live under the OS app-local-data directory. Startup validates the required CLI and native binaries in [runtime.rs](../src-tauri/src/runtime.rs).
+The desktop app's MIT license is installed beside its executable. The CLI runs from the runtime directory and ships its own license and third-party notices there. Writable `user-data/` and `temp/` directories live under the OS app-local-data directory. Startup validates the required CLI and native binaries in [runtime.rs](../src-tauri/src/runtime.rs).
 
 Runtime assets are build output. Recreate them with the [staging commands](development.md#build-profiles).
 

@@ -1,8 +1,8 @@
 # PenguinTools.UI Extend
 
-PenguinTools Extend is a fork of [PenguinTools.UI](https://github.com/ChuniPingu/PenguinTools.UI) by Foahh. It bundles [PenguinTools Extend](https://github.com/GiftiaAIRA/PenguinTools), the PenguinTools converter with support for charts from extended Margrete releases (2.3 and later) in addition to the official editors.
+PenguinTools Extend is a fork of [PenguinTools.UI](https://github.com/ChuniPingu/PenguinTools.UI) by Foahh. It bundles [PenguinTools Extend](https://github.com/GiftiaAIRA/PenguinTools), a chart converter that reads Margrete's standard and extended chart formats. See [chart conversion](https://github.com/GiftiaAIRA/PenguinTools/blob/main/docs/chart-conversion.md) for format coverage and limits.
 
-企鹅工具箱 Extend 基于 Foahh 的企鹅工具箱（PenguinTools）。它在原版功能之外，支持扩展版 Margrete（2.3 及以后）的谱面。问题请在本仓库反馈，不要提交到原项目。
+企鹅工具箱 Extend 基于 Foahh 的企鹅工具箱（PenguinTools），可以读取原版和扩展版 Margrete 的谱面格式。支持范围与限制见上方的转谱文档。问题请在本仓库反馈。
 
 [下载 / Download](https://github.com/GiftiaAIRA/PenguinTools.UI/releases/latest)
 
